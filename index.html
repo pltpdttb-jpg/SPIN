@@ -1,1 +1,516 @@
-https://pltpdttb-jpg.github.io/certify/
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPIN Selling Master: เกมทบทวนทักษะการขาย</title>
+    <!-- ใช้ Tailwind CSS สำหรับความสวยงามแบบ Production Grade -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- ใช้ Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        body {
+            font-family: 'Kanit', sans-serif;
+            /* พื้นหลังไล่สีแบบแอนิเมชัน ดูสนุกสนาน */
+            background: linear-gradient(-45deg, #FF6B6B, #4ECDC4, #45B7D1, #FDCB6E);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12), inset 0 0 0 2px rgba(255,255,255,0.5);
+        }
+        /* แอนิเมชันตอนเปลี่ยนหน้า เด้งๆ น่ารักๆ */
+        .fade-enter {
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        
+        /* ปุ่ม 3D สไตล์เกมมือถือ */
+        .btn-3d {
+            position: relative;
+            transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .btn-3d:active:not(:disabled) {
+            transform: translateY(6px);
+            box-shadow: 0 0px 0 0 transparent !important;
+        }
+        .btn-3d:disabled {
+            cursor: not-allowed;
+            transform: translateY(6px);
+            box-shadow: 0 0px 0 0 transparent !important;
+        }
+        /* สีแยกตามหมวดหมู่ */
+        .btn-s { background-color: #3b82f6; box-shadow: 0 6px 0 0 #1e3a8a; } /* Blue */
+        .btn-p { background-color: #ef4444; box-shadow: 0 6px 0 0 #7f1d1d; } /* Red */
+        .btn-i { background-color: #f59e0b; box-shadow: 0 6px 0 0 #78350f; } /* Orange */
+        .btn-n { background-color: #10b981; box-shadow: 0 6px 0 0 #064e3b; } /* Green */
+        .btn-main { background-color: #8b5cf6; box-shadow: 0 6px 0 0 #4c1d95; } /* Purple */
+
+        /* แอนิเมชันเวลาเฉลย */
+        .btn-correct {
+            animation: pulseCorrect 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            z-index: 10;
+        }
+        .btn-wrong {
+            animation: shake 0.4s forwards;
+            background-color: #9ca3af !important;
+            box-shadow: 0 6px 0 0 #4b5563 !important;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0) translateY(6px); }
+            25% { transform: translateX(-5px) translateY(6px); }
+            75% { transform: translateX(5px) translateY(6px); }
+        }
+        @keyframes pulseCorrect {
+            0% { transform: scale(1) translateY(6px); }
+            50% { transform: scale(1.05) translateY(6px); box-shadow: 0 0 20px rgba(255,255,255,0.8); }
+            100% { transform: scale(1.02) translateY(6px); }
+        }
+        
+        .hide {
+            display: none !important;
+        }
+        
+        /* ปรับแต่ง Scrollbar สำหรับตาราง */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="flex items-center justify-center p-3 sm:p-4 overflow-x-hidden">
+
+    <!-- 1. หน้าจอเริ่มต้น (Start Screen) -->
+    <div id="start-screen" class="glass-panel w-full max-w-md p-6 sm:p-8 text-center fade-enter mt-4 mb-4">
+        <div class="text-7xl mb-4 animate-bounce">🎯</div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-2 tracking-tight">SPIN Selling</h1>
+        <div class="inline-block bg-purple-100 text-purple-800 px-4 py-1 rounded-full font-bold text-sm mb-8 shadow-sm">
+            บททดสอบ: เปิดประเด็น • ปัญหา • ประโคม • ประโยชน์
+        </div>
+        
+        <div class="mb-8 text-left">
+            <label class="block text-gray-700 font-bold mb-3 text-lg" for="player-name">👤 พิมพ์ชื่อของคุณเลย!</label>
+            <input type="text" id="player-name" placeholder="ชื่อผู้เล่น..." 
+                class="w-full px-5 py-4 rounded-2xl border-4 border-gray-100 focus:border-purple-400 focus:bg-white bg-gray-50 focus:outline-none text-xl font-bold text-center transition-all shadow-inner">
+            <p id="name-error" class="text-red-500 text-sm mt-3 font-semibold text-center hide">⚠️ กรุณากรอกชื่อก่อนเริ่มเกมนะครับ!</p>
+        </div>
+        
+        <button onclick="startGame()" class="btn-3d btn-main w-full font-extrabold text-2xl py-4 rounded-2xl flex items-center justify-center gap-2">
+            <span>เริ่มลุยกันเลย!</span> 🚀
+        </button>
+    </div>
+
+    <!-- 2. หน้าจอเล่นเกม (Game Screen) -->
+    <div id="game-screen" class="glass-panel w-full max-w-2xl p-5 sm:p-8 hide my-4">
+        <!-- แถบด้านบน: ชื่อผู้เล่น, ข้อที่, คะแนน -->
+        <div class="flex justify-between items-center mb-5 bg-white p-3 sm:p-4 rounded-2xl shadow-sm border border-gray-100">
+            <div class="font-bold text-gray-700 truncate max-w-[50%]">
+                <span class="text-xl">👤</span> <span id="display-name" class="text-purple-600"></span>
+            </div>
+            <div class="font-black text-2xl text-gray-800 bg-yellow-100 px-4 py-1 rounded-xl text-yellow-700 border-2 border-yellow-300">
+                ⭐ <span id="current-score">0</span>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="flex items-center gap-3 mb-6">
+            <div class="font-extrabold text-gray-600 min-w-[40px]">ข้อ <span id="current-q-num">1</span></div>
+            <div class="w-full bg-gray-200 rounded-full h-4 shadow-inner overflow-hidden border border-gray-300">
+                <div id="progress-bar" class="bg-gradient-to-r from-green-400 via-blue-500 to-purple-500 h-full rounded-full transition-all duration-500 relative" style="width: 10%">
+                    <div class="absolute inset-0 bg-white/20" style="background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent); background-size: 1rem 1rem;"></div>
+                </div>
+            </div>
+            <div class="font-extrabold text-gray-400">10</div>
+        </div>
+
+        <!-- ประโยคคำถาม -->
+        <div class="bg-white border-4 border-blue-100 p-6 sm:p-8 rounded-3xl mb-8 min-h-[140px] flex items-center justify-center shadow-md relative">
+            <div class="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white font-bold px-4 py-1 rounded-full text-sm shadow-md">
+                ประโยคนี้คืออะไร?
+            </div>
+            <h2 id="question-text" class="text-xl sm:text-2xl font-bold text-center text-gray-800 leading-relaxed">
+                <!-- คำถามจะมาแสดงตรงนี้ -->
+            </h2>
+        </div>
+
+        <!-- ปุ่มตัวเลือก 4 ปุ่ม (จัดเรียง 1 คอลัมน์บนมือถือ 2 คอลัมน์บนจอใหญ่) -->
+        <div class="flex flex-col sm:grid sm:grid-cols-2 gap-4 sm:gap-5" id="choices-container">
+            <button onclick="checkAnswer('S')" id="btn-S" class="btn-choice btn-3d btn-s w-full py-4 sm:py-5 px-4 font-extrabold text-lg sm:text-xl rounded-2xl flex items-center justify-center gap-2">
+                <span class="text-2xl">🔍</span> เปิดประเด็น (S)
+            </button>
+            <button onclick="checkAnswer('P')" id="btn-P" class="btn-choice btn-3d btn-p w-full py-4 sm:py-5 px-4 font-extrabold text-lg sm:text-xl rounded-2xl flex items-center justify-center gap-2">
+                <span class="text-2xl">⚠️</span> ปัญหา (P)
+            </button>
+            <button onclick="checkAnswer('I')" id="btn-I" class="btn-choice btn-3d btn-i w-full py-4 sm:py-5 px-4 font-extrabold text-lg sm:text-xl rounded-2xl flex items-center justify-center gap-2">
+                <span class="text-2xl">🔥</span> ประโคม (I)
+            </button>
+            <button onclick="checkAnswer('N')" id="btn-N" class="btn-choice btn-3d btn-n w-full py-4 sm:py-5 px-4 font-extrabold text-lg sm:text-xl rounded-2xl flex items-center justify-center gap-2">
+                <span class="text-2xl">💡</span> ประโยชน์ (N)
+            </button>
+        </div>
+
+        <!-- ข้อความตอบรับ ถูก/ผิด -->
+        <div id="feedback-msg" class="text-center font-black text-2xl sm:text-3xl mt-6 h-10 opacity-0 transition-opacity"></div>
+
+        <!-- กล่องคำอธิบายและปุ่มไปต่อ -->
+        <div id="explanation-container" class="mt-4 bg-white p-5 sm:p-6 rounded-3xl border-4 border-gray-100 shadow-lg hide fade-enter">
+            <div class="flex items-start gap-3 mb-4">
+                <div class="text-3xl">👨‍🏫</div>
+                <div>
+                    <h3 class="font-extrabold text-gray-800 text-lg">คำอธิบาย:</h3>
+                    <p id="explanation-text" class="text-gray-600 font-medium text-base sm:text-lg mt-1 leading-relaxed"></p>
+                </div>
+            </div>
+            <button onclick="nextQuestion()" class="btn-3d btn-main w-full font-extrabold text-xl py-4 rounded-2xl shadow-md mt-2">
+                ไปข้อถัดไป ➡️
+            </button>
+        </div>
+    </div>
+
+    <!-- 3. หน้าจอสรุปผล (End Screen) -->
+    <div id="end-screen" class="glass-panel w-full max-w-3xl p-6 sm:p-8 hide my-4">
+        <div class="text-center mb-8">
+            <div id="result-icon" class="text-7xl sm:text-8xl mb-4 animate-bounce">🏆</div>
+            <h1 class="text-3xl sm:text-4xl font-black text-gray-800 mb-2">สรุปผลการทดสอบ</h1>
+            <p class="text-lg sm:text-xl text-gray-600 font-semibold">ทำได้เยี่ยมมากคุณ <span id="final-name" class="text-purple-600"></span>!</p>
+            
+            <div class="mt-8 bg-white border-4 border-yellow-300 inline-block px-10 py-6 rounded-[2rem] shadow-lg relative transform rotate-1">
+                <div class="absolute -top-4 -right-4 text-4xl">✨</div>
+                <p class="text-gray-500 font-bold text-lg mb-1 uppercase tracking-wider">คะแนนรวม</p>
+                <div class="text-6xl sm:text-7xl font-black text-yellow-500 drop-shadow-md">
+                    <span id="final-score">0</span><span class="text-3xl text-gray-400">/10</span>
+                </div>
+            </div>
+            <p id="result-message" class="text-xl sm:text-2xl font-bold text-gray-800 mt-8"></p>
+        </div>
+
+        <!-- ตารางเฉลย -->
+        <div class="mb-8">
+            <h3 class="font-extrabold text-gray-800 mb-4 text-lg flex items-center gap-2">
+                <span>📝</span> ทบทวนประโยคที่คุณตอบ:
+            </h3>
+            <div class="max-h-72 overflow-y-auto border-4 border-gray-100 rounded-3xl bg-white shadow-inner">
+                <table class="w-full text-left border-collapse min-w-[500px]">
+                    <thead class="bg-gray-50 sticky top-0 z-10 shadow-sm">
+                        <tr>
+                            <th class="p-4 font-bold text-gray-600">ประโยค</th>
+                            <th class="p-4 font-bold text-gray-600 w-28 text-center">เฉลย</th>
+                            <th class="p-4 font-bold text-gray-600 w-20 text-center">ผล</th>
+                        </tr>
+                    </thead>
+                    <tbody id="review-table-body">
+                        <!-- แถวตารางจะถูกเพิ่มด้วย JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <button onclick="resetGame()" class="btn-3d btn-main w-full font-extrabold text-2xl py-4 rounded-2xl flex items-center justify-center gap-2">
+            <span>🔄 เล่นอีกครั้ง</span>
+        </button>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // 1. คลังประโยค 40 ประโยค (Production Grade Content)
+        const questionPool = [
+            // S = เปิดประเด็น (Situation)
+            { id: 1, type: 'S', text: "ปัจจุบันคุณใช้ระบบอะไรในการจัดการข้อมูลลูกค้าครับ?", explanation: "ถามเพื่อรวบรวมข้อเท็จจริง (Fact) เกี่ยวกับเครื่องมือหรือระบบที่ใช้งานอยู่ในปัจจุบัน" },
+            { id: 2, type: 'S', text: "ปกติแล้วกระบวนการอนุมัติเอกสารใช้เวลานานแค่ไหนครับ?", explanation: "ถามหาข้อเท็จจริงเกี่ยวกับกระบวนการทำงานและเวลาที่ใช้ตามปกติขององค์กร" },
+            { id: 3, type: 'S', text: "ตอนนี้ทีมเซลส์ของคุณมีทั้งหมดกี่คนครับ?", explanation: "เป็นการเก็บข้อมูลพื้นฐานเกี่ยวกับขนาดของทีมงานและโครงสร้างบุคลากร" },
+            { id: 4, type: 'S', text: "โครงสร้างพื้นฐานด้านไอทีของคุณในปัจจุบันเป็นอย่างไรบ้างครับ?", explanation: "รวบรวมข้อมูลเกี่ยวกับโครงสร้างพื้นฐานเพื่อทำความเข้าใจสถานะปัจจุบัน" },
+            { id: 5, type: 'S', text: "คุณใช้ซอฟต์แวร์นี้มานานแค่ไหนแล้วครับ?", explanation: "ถามถึงระยะเวลาการใช้งานเพื่อประเมินความคุ้นเคยและอายุของระบบเดิม" },
+            { id: 6, type: 'S', text: "ใครเป็นผู้รับผิดชอบหลักในการดูแลระบบเน็ตเวิร์กครับ?", explanation: "ค้นหาผู้มีอำนาจตัดสินใจหรือผู้ดูแลรับผิดชอบหลักในปัจจุบัน" },
+            { id: 7, type: 'S', text: "ขั้นตอนการแพ็คสินค้าของคุณทำด้วยมือหรือใช้เครื่องจักรครับ?", explanation: "สอบถามเพื่อเก็บข้อมูลเกี่ยวกับวิธีการปฏิบัติงานในปัจจุบัน" },
+            { id: 8, type: 'S', text: "ปัจจุบันคุณมีสาขาทั้งหมดกี่แห่งครับ?", explanation: "เก็บข้อมูลพื้นฐานเชิงสถิติของธุรกิจเพื่อประเมินขนาดและสเกลงาน" },
+            { id: 9, type: 'S', text: "แผนกการตลาดใช้งบประมาณส่วนใหญ่ไปกับช่องทางไหนครับ?", explanation: "ทำความเข้าใจสถานการณ์การจัดสรรงบประมาณในปัจจุบัน" },
+            { id: 10, type: 'S', text: "ปกติแล้วคุณสั่งซื้อวัตถุดิบล่วงหน้านานแค่ไหนครับ?", explanation: "ถามหาข้อเท็จจริงเรื่องพฤติกรรมหรือรอบเวลา (Cycle) ในการทำงาน" },
+            
+            // P = ปัญหา (Problem)
+            { id: 11, type: 'P', text: "คุณพบปัญหาอะไรบ้างในการใช้ระบบจัดการสต๊อกแบบเดิมครับ?", explanation: "ถามหาความไม่สะดวก หรือ 'ปัญหา' ของการใช้ระบบตัวเดิมตรงๆ" },
+            { id: 12, type: 'P', text: "การที่ระบบล่มบ่อยๆ ทำให้การทำงานสะดุดบ้างไหมครับ?", explanation: "ชี้ให้เห็นและถามถึงความขัดข้องหรือปัญหาที่รบกวนการทำงาน" },
+            { id: 13, type: 'P', text: "ทีมงานบ่นเรื่องความล่าช้าในการดึงข้อมูลบ้างไหมครับ?", explanation: "ถามถึงความไม่พึงพอใจหรือเสียงบ่น ซึ่งเป็นสัญญาณของปัญหาในทีม" },
+            { id: 14, type: 'P', text: "คุณคิดว่าขั้นตอนการทำงานปัจจุบันมีความซ้ำซ้อนตรงไหนบ้าง?", explanation: "เจาะลึกเพื่อหาจุดอ่อนหรือข้อบกพร่องในกระบวนการทำงานปัจจุบัน" },
+            { id: 15, type: 'P', text: "การสอนพนักงานใหม่ให้ใช้ระบบนี้มีความยุ่งยากแค่ไหนครับ?", explanation: "ถามถึงความยากลำบากในการเรียนรู้ระบบ ซึ่งถือเป็นปัญหาด้าน Usability" },
+            { id: 16, type: 'P', text: "อุปกรณ์ที่ใช้อยู่ตอนนี้มีปัญหาเรื่องค่าบำรุงรักษาแพงไหมครับ?", explanation: "ระบุปัญหาด้านงบประมาณที่อาจจะบานปลายเกินความจำเป็น" },
+            { id: 17, type: 'P', text: "ลูกค้ามีข้อร้องเรียนเรื่องการจัดส่งล่าช้าบ่อยแค่ไหนครับ?", explanation: "ดึงเอาปัญหาหรือข้อร้องเรียนจากฝั่งลูกค้าขึ้นมาพูดคุย" },
+            { id: 18, type: 'P', text: "การทำรายงานแบบแมนนวลทำให้เกิดข้อผิดพลาดบ่อยไหมครับ?", explanation: "ถามถึงข้อผิดพลาด (Error) ที่มักเกิดจากการทำงานด้วยมนุษย์" },
+            { id: 19, type: 'P', text: "คุณกำลังกังวลเรื่องต้นทุนการผลิตที่พุ่งสูงขึ้นใช่ไหมครับ?", explanation: "ชี้ประเด็นความกังวลหรือความกดดันเรื่องต้นทุนซึ่งเป็น Pain point หลัก" },
+            { id: 20, type: 'P', text: "ซอฟต์แวร์ปัจจุบันไม่สามารถเชื่อมต่อกับระบบบัญชีได้ใช่ไหมครับ?", explanation: "เจาะจงไปที่ข้อจำกัดหรือจุดบอดของระบบที่ไม่ตอบโจทย์การทำงาน" },
+
+            // I = ประโคม (Implication)
+            { id: 21, type: 'I', text: "ความล่าช้านี้ทำให้บริษัทสูญเสียรายได้ไปประมาณเท่าไหร่ครับ?", explanation: "ขยายผลจากปัญหาความล่าช้า สู่ 'ผลกระทบ' เชิงธุรกิจ (ตัวเลขรายได้ที่หายไป)" },
+            { id: 22, type: 'I', text: "ถ้าปัญหานี้ยังไม่ถูกแก้ มันจะส่งผลกระทบต่อเป้ายอดขายปลายปีอย่างไรครับ?", explanation: "ขยายภาพให้เห็นว่าปัญหานี้จะลุกลามไปกระทบเป้าหมายใหญ่ได้อย่างไร" },
+            { id: 23, type: 'I', text: "การที่ระบบล่มหนึ่งชั่วโมง ทำให้พนักงานกี่คนไม่สามารถทำงานได้ครับ?", explanation: "ทำให้ลูกค้าตระหนักถึงมูลค่าความเสียหาย (Man-hour) จากปัญหา" },
+            { id: 24, type: 'I', text: "ข้อผิดพลาดจากการคีย์ข้อมูลมือ ส่งผลต่อความน่าเชื่อถือของบริษัทอย่างไรบ้าง?", explanation: "โยงปัญหาเรื่องข้อผิดพลาด ไปสู่ผลกระทบร้ายแรงด้าน 'ภาพลักษณ์และความน่าเชื่อถือ'" },
+            { id: 25, type: 'I', text: "ถ้าพนักงานลาออกบ่อยเพราะระบบทำงานยาก ต้นทุนการหาคนใหม่จะเพิ่มขึ้นแค่ไหนครับ?", explanation: "ขยายผลปัญหาพนักงานลาออก ให้เห็นเป็นตัวเลขต้นทุนที่ซ่อนอยู่ (Hidden Cost)" },
+            { id: 26, type: 'I', text: "การเสียเวลาไปกับงานเอกสาร ทำให้ทีมเซลส์พลาดโอกาสเข้าพบลูกค้าใหม่ๆ ไปกี่รายครับ?", explanation: "ชี้ให้เห็นถึง 'ค่าเสียโอกาส' (Opportunity Cost) ทางธุรกิจ" },
+            { id: 27, type: 'I', text: "หากสินค้าตกค้างในสต๊อกนานๆ จะส่งผลเสียต่อกระแสเงินสดของบริษัทอย่างไรครับ?", explanation: "เชื่อมโยงปัญหาระดับปฏิบัติการ เข้ากับผลกระทบระดับองค์กร (กระแสเงินสด)" },
+            { id: 28, type: 'I', text: "ค่าใช้จ่ายแฝงจากเครื่องจักรที่เสียบ่อยๆ ทำให้กำไรสุทธิของคุณลดลงกี่เปอร์เซ็นต์ครับ?", explanation: "แปลงปัญหาเครื่องจักรเสีย ให้เป็นตัวเลขผลกระทบต่อกำไรที่หดหายไป" },
+            { id: 29, type: 'I', text: "การที่ข้อมูลไม่ลิงก์กัน ทำให้คุณพลาดโอกาสในการขายสินค้าอื่นๆ เพิ่มเติมมากน้อยแค่ไหนครับ?", explanation: "แสดงให้เห็นว่าข้อจำกัดของระบบ ทำให้เกิดผลกระทบคือสูญเสียโอกาสการขายเพิ่ม" },
+            { id: 30, type: 'I', text: "ถ้าคู่แข่งแก้ปัญหาเรื่องความเร็วนี่ได้ก่อน จะส่งผลต่อส่วนแบ่งการตลาดของคุณอย่างไรครับ?", explanation: "ยกระดับผลกระทบให้เป็นเรื่องของการเสียเปรียบทางการแข่งขันในตลาด" },
+
+            // N = ประโยชน์ (Need-payoff)
+            { id: 31, type: 'N', text: "ถ้ามีระบบที่ช่วยลดเวลาทำงานเอกสารได้ 50% จะช่วยให้ทีมงานทำงานได้ดีขึ้นอย่างไรครับ?", explanation: "ให้ลูกค้าจินตนาการถึง 'ประโยชน์' ที่จะได้รับหากปัญหาเรื่องเวลาถูกแก้ไข" },
+            { id: 32, type: 'N', text: "หากเราสามารถลดค่าบำรุงรักษาลงได้ 20% คุณจะนำงบประมาณส่วนนี้ไปทำอะไรได้บ้างครับ?", explanation: "มุ่งเน้นไปที่ผลลัพธ์เชิงบวก (งบที่เหลือไปทำอย่างอื่นได้) หากประหยัดต้นทุนได้" },
+            { id: 33, type: 'N', text: "ระบบที่ป้องกันไม่ให้เซิร์ฟเวอร์ล่มเลย จะช่วยเพิ่มความพึงพอใจให้ลูกค้าของคุณได้มากแค่ไหนครับ?", explanation: "ให้ลูกค้าพูดถึงผลลัพธ์และประโยชน์เชิงบวก (ความพึงพอใจลูกค้า) จากทางแก้ปัญหา" },
+            { id: 34, type: 'N', text: "การมี Dashboard แบบเรียลไทม์จะช่วยให้คุณตัดสินใจทางธุรกิจได้แม่นยำขึ้นอย่างไรบ้างครับ?", explanation: "ถามเพื่อชี้ให้เห็นถึง 'คุณค่า' และประโยชน์ต่อตัวผู้บริหารเอง" },
+            { id: 35, type: 'N', text: "ถ้าพนักงานสามารถดึงข้อมูลได้ภายใน 5 วินาที จะช่วยเพิ่มยอดขายต่อวันได้เท่าไหร่ครับ?", explanation: "เชื่อมโยงความสามารถของระบบ ไปสู่คุณค่าด้านการเพิ่มยอดขาย" },
+            { id: 36, type: 'N', text: "การเชื่อมต่อข้อมูลทุกสาขาเข้าด้วยกัน จะช่วยลดความซ้ำซ้อนในการทำงานได้ดีแค่ไหนครับ?", explanation: "เน้นย้ำถึงภาพความสำเร็จและประโยชน์จากการเพิ่มประสิทธิภาพการทำงาน" },
+            { id: 37, type: 'N', text: "หากซอฟต์แวร์ของเราช่วยให้คุณปิดการขายได้เร็วขึ้น 30% มันจะคุ้มค่ากับคุณไหมครับ?", explanation: "ให้ลูกค้ายืนยันความคุ้มค่าและประโยชน์จากการปิดการขายที่เร็วขึ้นด้วยตัวเอง" },
+            { id: 38, type: 'N', text: "การลดข้อผิดพลาดในการจัดส่งให้เหลือ 0% จะช่วยสร้างภาพลักษณ์ที่ดีให้แบรนด์อย่างไรครับ?", explanation: "ถามเพื่อให้ลูกค้าเห็นผลลัพธ์เชิงบวกต่อภาพลักษณ์ในระยะยาว" },
+            { id: 39, type: 'N', text: "ถ้าคุณสามารถติดตามสถานะสินค้าได้ทุกที่ทุกเวลา จะช่วยลดความเครียดในการทำงานได้ไหมครับ?", explanation: "แตะไปถึงประโยชน์ด้านอารมณ์ความรู้สึก (ลดความเครียด) ของผู้ทำงาน" },
+            { id: 40, type: 'N', text: "ระบบอัตโนมัตินี้จะช่วยให้คุณมีเวลาไปโฟกัสกับการวางกลยุทธ์ได้มากขึ้นแค่ไหนครับ?", explanation: "ให้ลูกค้าจินตนาการถึงคุณค่าของ 'เวลาอิสระ' ที่ได้กลับคืนมาทำเรื่องสำคัญ" }
+        ];
+
+        // ชื่อประเภทสำหรับแสดงผล
+        const typeNames = {
+            'S': 'เปิดประเด็น',
+            'P': 'ปัญหา',
+            'I': 'ประโคม',
+            'N': 'ประโยชน์'
+        };
+
+        // State Variables
+        let playerName = '';
+        let gameQuestions = []; // เก็บ 10 ข้อที่สุ่มมา
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let isWaiting = false; // ป้องกันการกดซ้ำตอนกำลังเฉลย
+        let userAnswers = []; // เก็บประวัติการตอบ
+
+        // ฟังก์ชันสุ่ม Array (Fisher-Yates Shuffle)
+        function shuffleArray(array) {
+            let curId = array.length;
+            while (0 !== curId) {
+                let randId = Math.floor(Math.random() * curId);
+                curId -= 1;
+                let tmp = array[curId];
+                array[curId] = array[randId];
+                array[randId] = tmp;
+            }
+            return array;
+        }
+
+        // เริ่มเกม
+        function startGame() {
+            const nameInput = document.getElementById('player-name').value.trim();
+            const errorMsg = document.getElementById('name-error');
+
+            if (nameInput === '') {
+                errorMsg.classList.remove('hide');
+                return;
+            }
+
+            errorMsg.classList.add('hide');
+            playerName = nameInput;
+            document.getElementById('display-name').innerText = playerName;
+
+            // สุ่มคำถามและเลือกมา 10 ข้อ
+            const shuffledPool = shuffleArray([...questionPool]);
+            gameQuestions = shuffledPool.slice(0, 10);
+            
+            // รีเซ็ตค่า
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+            updateScoreDisplay();
+
+            // เปลี่ยนหน้าจอ
+            document.getElementById('start-screen').classList.add('hide');
+            const gameScreen = document.getElementById('game-screen');
+            gameScreen.classList.remove('hide');
+            gameScreen.classList.add('fade-enter');
+
+            showQuestion();
+        }
+
+        // แสดงคำถามปัจจุบัน
+        function showQuestion() {
+            isWaiting = false;
+            const q = gameQuestions[currentQuestionIndex];
+            
+            // อัปเดต UI
+            document.getElementById('current-q-num').innerText = currentQuestionIndex + 1;
+            document.getElementById('question-text').innerText = `"${q.text}"`;
+            
+            // อัปเดต Progress Bar
+            const progressPercent = ((currentQuestionIndex) / 10) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+
+            // รีเซ็ตปุ่มและข้อความ
+            document.getElementById('feedback-msg').style.opacity = '0';
+            document.getElementById('explanation-container').classList.add('hide');
+            
+            // คืนค่าปุ่มทั้งหมดให้เป็นสภาพเดิม
+            const btnS = document.getElementById('btn-S');
+            const btnP = document.getElementById('btn-P');
+            const btnI = document.getElementById('btn-I');
+            const btnN = document.getElementById('btn-N');
+
+            [btnS, btnP, btnI, btnN].forEach(btn => {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.classList.remove('btn-correct', 'btn-wrong');
+            });
+        }
+
+        // ตรวจคำตอบ
+        function checkAnswer(selectedType) {
+            if (isWaiting) return;
+            isWaiting = true;
+
+            const q = gameQuestions[currentQuestionIndex];
+            const isCorrect = (selectedType === q.type);
+            
+            // เก็บประวัติ
+            userAnswers.push({
+                text: q.text,
+                correctType: q.type,
+                isCorrect: isCorrect
+            });
+
+            const selectedBtn = document.getElementById(`btn-${selectedType}`);
+            const correctBtn = document.getElementById(`btn-${q.type}`);
+            const feedbackMsg = document.getElementById('feedback-msg');
+
+            // ปิดการกดปุ่มทั้งหมดและทำให้ปุ่มที่ไม่เกี่ยวข้องจางลง
+            document.querySelectorAll('.btn-choice').forEach(btn => {
+                btn.disabled = true;
+                if(btn !== selectedBtn && btn !== correctBtn) {
+                    btn.style.opacity = '0.4';
+                }
+            });
+
+            if (isCorrect) {
+                score++;
+                updateScoreDisplay();
+                selectedBtn.classList.add('btn-correct');
+                feedbackMsg.innerText = "🎉 ถูกต้องยอดเยี่ยม!";
+                feedbackMsg.className = "text-center font-black text-2xl sm:text-3xl mt-6 h-10 transition-opacity text-green-500 drop-shadow-md";
+            } else {
+                selectedBtn.classList.add('btn-wrong');
+                correctBtn.classList.add('btn-correct'); // ไฮไลท์ข้อที่ถูกด้วย
+                feedbackMsg.innerText = `❌ ผิดจ้า... ที่ถูกคือ "${typeNames[q.type]}"`;
+                feedbackMsg.className = "text-center font-black text-2xl sm:text-3xl mt-6 h-10 transition-opacity text-red-500 drop-shadow-md";
+            }
+            
+            feedbackMsg.style.opacity = '1';
+
+            // แสดงคำอธิบายและปุ่มไปต่อ
+            document.getElementById('explanation-text').innerText = q.explanation;
+            document.getElementById('explanation-container').classList.remove('hide');
+        }
+
+        // ฟังก์ชันไปข้อถัดไป
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < 10) {
+                showQuestion();
+            } else {
+                endGame();
+            }
+        }
+
+        function updateScoreDisplay() {
+            document.getElementById('current-score').innerText = score;
+        }
+
+        // จบเกมและแสดงผล
+        function endGame() {
+            // อัปเดต Progress Bar ให้เต็ม
+            document.getElementById('progress-bar').style.width = `100%`;
+
+            setTimeout(() => {
+                document.getElementById('game-screen').classList.add('hide');
+                const endScreen = document.getElementById('end-screen');
+                endScreen.classList.remove('hide');
+                endScreen.classList.add('fade-enter');
+
+                document.getElementById('final-name').innerText = playerName;
+                document.getElementById('final-score').innerText = score;
+
+                // ข้อความสรุปตามคะแนน
+                const msgEl = document.getElementById('result-message');
+                const iconEl = document.getElementById('result-icon');
+                if (score === 10) {
+                    msgEl.innerText = "คุณคือสุดยอดปรมาจารย์ SPIN Selling!";
+                    iconEl.innerText = "👑";
+                } else if (score >= 7) {
+                    msgEl.innerText = "ทักษะการขายของคุณอยู่ในระดับดีเยี่ยม!";
+                    iconEl.innerText = "🌟";
+                } else if (score >= 4) {
+                    msgEl.innerText = "พื้นฐานดีแล้ว ฝึกอีกนิดจะเฉียบคมมากครับ!";
+                    iconEl.innerText = "👍";
+                } else {
+                    msgEl.innerText = "ไม่ต้องเสียใจ ทบทวนอีกรอบคุณทำได้แน่นอน!";
+                    iconEl.innerText = "💪";
+                }
+
+                buildReviewTable();
+            }, 500);
+        }
+
+        // สร้างตารางทบทวน
+        function buildReviewTable() {
+            const tbody = document.getElementById('review-table-body');
+            tbody.innerHTML = ''; // Clear old
+
+            userAnswers.forEach((ans, index) => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b-2 border-gray-100 hover:bg-gray-50 transition-colors";
+                
+                const resultIcon = ans.isCorrect 
+                    ? '<span class="text-green-500 font-black text-xl">✅</span>' 
+                    : '<span class="text-red-500 font-black text-xl">❌</span>';
+
+                tr.innerHTML = `
+                    <td class="p-4 text-base font-medium text-gray-800 leading-snug">${index + 1}. ${ans.text}</td>
+                    <td class="p-4 text-center">
+                        <span class="bg-gray-100 border-2 border-gray-200 px-3 py-1 rounded-lg text-sm font-bold text-gray-700 whitespace-nowrap">${typeNames[ans.correctType]}</span>
+                    </td>
+                    <td class="p-4 text-center">${resultIcon}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // เริ่มเกมใหม่ (กดปุ่มเล่นอีกครั้ง)
+        function resetGame() {
+            document.getElementById('end-screen').classList.add('hide');
+            // เริ่มเกมใหม่โดยไม่ต้องกรอกชื่อใหม่
+            const shuffledPool = shuffleArray([...questionPool]);
+            gameQuestions = shuffledPool.slice(0, 10);
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+            updateScoreDisplay();
+            
+            const gameScreen = document.getElementById('game-screen');
+            gameScreen.classList.remove('hide');
+            showQuestion();
+        }
+
+        // ป้องกันฟอร์ม Submit ตอนกด Enter ในช่องกรอกชื่อ
+        document.getElementById('player-name').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                startGame();
+            }
+        });
+    </script>
+</body>
+</html>
